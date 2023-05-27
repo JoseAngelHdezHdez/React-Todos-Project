@@ -1,6 +1,7 @@
 import { useState } from "react";
+import Swal from "sweetalert2";
 
-const Controlado = () => {
+const Formulario = ({ addTodo }) => {
   //   const [title, setTitle] = useState("");
   //   const [description, setDescription] = useState("");
   //   const [state, setState] = useState("pendiente");
@@ -16,7 +17,28 @@ const Controlado = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(title, description, state);
+
+    if (!title.trim() || !description.trim()) {
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Si sabes llenar los campos 🤨😡",
+      });
+    }
+
+    addTodo({
+      id: Date.now(),
+      ...todo,
+      state: state === "completado",
+    });
+
+    Swal.fire({
+      position: 'center',
+      icon: "success",
+      title: "Todo agregado correctamente 😎👍",
+      showConfirmButton: false,
+      timer: 1500
+    })
   };
 
   const handleChange = (e) => {
@@ -69,10 +91,10 @@ const Controlado = () => {
         <option value="completado">Completado</option>
       </select>
       <button type="submit" className="btn btn-primary">
-        Procesar
+        Agregar Todo
       </button>
     </form>
   );
 };
 
-export default Controlado;
+export default Formulario;
